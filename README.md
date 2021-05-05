@@ -27,7 +27,7 @@ in `dump_svg.js`:
 
 ```javascript
 async function run() {
-
+   
   const jssm_viz = require('jssm-viz'),
         fsl_code = 'green => yellow => red => green; [green yellow red] ~> off -> red;';
 
