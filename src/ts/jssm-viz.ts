@@ -1,17 +1,19 @@
 
-import * as jssm from 'jssm';
-const sm = jssm.sm;
+import * as jssm               from 'jssm';
 
-import Viz from 'viz.js';
-import { Module, render } from 'viz.js/full.render.js';
+import Viz                     from 'viz.js';
+import { Module, render }      from 'viz.js/full.render.js';
 
-import { default_viz_colors } from './default_colors';
+import { default_viz_colors }  from './default_colors';
 
-
-
+import { version, build_time } from './generated_code/version';
 
 
-var viz = new Viz({ Module, render });
+
+
+
+const sm  = jssm.sm;
+var   viz = new Viz({ Module, render });
 
 
 
@@ -166,7 +168,7 @@ function style_for_state(u_jssm, state): string | undefined {
   const lines = {
     dashed: 'dashed',
     dotted: 'dotted'
-  }[state_decl.linestyle];
+  }[state_decl.lineStyle];
 
   const style = [corners, lines]
                   .filter(f => f !== '')
@@ -200,20 +202,23 @@ function states_to_nodes_string(u_jssm, l_states): string {
 
   return l_states.map( (s) => {
 
-    const bordercolor = border_color_for_state(u_jssm, s),
-          bgcolor     = background_color_for_state(u_jssm, s),
-          fgcolor     = text_color_for_state(u_jssm, s);
+    const style = u_jssm.style_for(s);
+
+    const border_color = style.borderColor,
+          line_style   = style.lineStyle,
+          bgcolor      = style.backgroundColor,
+          fgcolor      = style.textColor,
+          corners      = style.corners;
 
     const this_state = u_jssm.state_for(s),
-//        opening    = u_jssm.state_is_start_state(s),   TODO COMEBACK FIXME
           terminal   = u_jssm.state_is_terminal(s),
           final      = u_jssm.state_is_final(s),
           complete   = u_jssm.state_is_complete(s),
+          use_label  = u_jssm.display_text(s),
           features   = [
-                        ['label',       s],
-                        ['shape',       shape_for_state(u_jssm, s)   || ''],
-                        ['peripheries', complete? 2 : 1  ],  // TODO COMEBACK use peripheries for current state instead
-                        ['color',       bordercolor                  || '' ],
+                        ['label',       use_label],
+                        ['shape',       style.shape                  || ''],
+                        ['color',       border_color                 || '' ],
                         ['style',       style_for_state(u_jssm, s)   || '' ],
                         ['fontcolor',   fgcolor                      || '' ],
                         ['fillcolor',   bgcolor ? bgcolor             :
@@ -408,7 +413,6 @@ function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
 
 
 // compatability, remove in 2.0.0
-
 function dot(jssm: any) {
   machine_to_dot(jssm);
 }
@@ -433,6 +437,14 @@ function fsl_to_svg_string(fsl: string, errorHandler?: Function): Promise<string
 
 
 
+function machine_to_svg_string(u_jssm: any, errorHandler?: Function): Promise<string> {
+  return dot_to_svg(machine_to_dot(u_jssm), errorHandler);
+}
+
+
+
+
+
 // function fsl_to_parsed_svg(fsl: string): SVGElement {
 //   return fsl_to_svg_string(fsl);
 // }
@@ -444,6 +456,7 @@ function fsl_to_svg_string(fsl: string, errorHandler?: Function): Promise<string
 export {
   dot, dot_to_svg, // svg_el,
   fsl_to_dot, fsl_to_svg_string,
-  machine_to_dot,
-  jssm
+  machine_to_dot, machine_to_svg_string,
+  jssm,
+  version, build_time
 };

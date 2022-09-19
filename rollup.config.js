@@ -1,8 +1,7 @@
 
-import nodeResolve from 'rollup-plugin-node-resolve';
-import typescript  from 'rollup-plugin-typescript2';
-import commonjs    from 'rollup-plugin-commonjs';
-import ignore      from 'rollup-plugin-ignore';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import commonjs    from '@rollup/plugin-commonjs';
+// import ignore      from '@rollup/plugin-ignore';
 
 const pkg = require('./package');
 
@@ -12,10 +11,10 @@ const pkg = require('./package');
 
 const es6config = {
 
-  input     : 'src/ts/jssm-viz.ts',
+  input     : 'build/typescript/jssm-viz.js',
 
   output    : {
-    file      : 'build/jssm-viz.es6.js',
+    file      : 'build/rollup/jssm-viz.es6.js',
     format    : 'es',
     name      : 'jssm_viz',
     sourcemap : true,
@@ -23,9 +22,7 @@ const es6config = {
 
   plugins   : [
 
-    ignore(['fs', 'path', 'crypto']),
-
-    typescript(),
+//    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
       include: 'node_modules/**'
@@ -49,10 +46,10 @@ const es6config = {
 
 const cjsconfig = {
 
-  input     : 'src/ts/jssm-viz.ts',
+  input     : 'build/typescript/jssm-viz.js',
 
   output    : {
-    file      : 'build/jssm-viz.cjs.js',
+    file      : 'build/rollup/jssm-viz.cjs.js',
     format    : 'cjs',
     name      : 'jssm_viz',
     sourcemap : true,
@@ -60,9 +57,7 @@ const cjsconfig = {
 
   plugins   : [
 
-    ignore(['fs', 'path', 'crypto']),
-
-    typescript(),
+//    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
       include: 'node_modules/**'
@@ -86,10 +81,10 @@ const cjsconfig = {
 
 const iifeconfig = {
 
-  input     : 'src/ts/jssm-viz.ts',
+  input     : 'build/typescript/jssm-viz.js',
 
   output    : {
-    file      : 'build/jssm-viz.iife.js',
+    file      : 'build/rollup/jssm-viz.iife.js',
     format    : 'iife',
     name      : 'jssm_viz',
     sourcemap : true,
@@ -97,9 +92,7 @@ const iifeconfig = {
 
   plugins   : [
 
-    ignore(['fs', 'path', 'crypto']),
-
-    typescript(),
+//    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
       include: 'node_modules/**'
